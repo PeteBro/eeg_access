@@ -36,17 +36,6 @@ Load trials from a versioned zarr dataset::
    for batch in loader.iter_data(subject='sub-01', batch_size=64):
        process(batch['data'])
 
-Building Metadata
------------------
-
-If you have your own preprocessed zarr epoch stores and need to generate the
-metadata TSV that :class:`~eeg_access.TrialHandler` expects::
-
-   from eeg_access import build_trial_metadata
-
-   meta = build_trial_metadata('/data/eeg_study/v2')
-   meta.to_csv('/data/eeg_study/v2/epoch_metadata.tsv', sep='\t')
-
 Expected Dataset Layout
 -----------------------
 

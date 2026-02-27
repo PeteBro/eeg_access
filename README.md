@@ -1,2 +1,7 @@
 # eeg_access
-Seperate repository for nsd-eeg access package, eventually to be merged with NSDaccess.
+
+[![Documentation Status](https://readthedocs.org/projects/nsd-access/badge/?version=latest)](https://nsd-access.readthedocs.io/en/latest/)
+
+Simple interface for loading versioned EEG epoch datasets from zarr stores.
+
+Full documentation: https://nsd-access.readthedocs.io/en/latest/
