@@ -9,6 +9,12 @@ Trial Data
 .. autoclass:: TrialHandler
    :members:
 
+Writing Data
+------------
+
+.. autoclass:: DatastoreWriter
+   :members:
+
 Utilities
 ---------
 

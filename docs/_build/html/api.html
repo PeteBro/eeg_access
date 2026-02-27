@@ -54,6 +54,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-data">Writing Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eeg_access.DatastoreWriter"><code class="docutils literal notranslate"><span class="pre">DatastoreWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#eeg_access.DatastoreWriter.write"><code class="docutils literal notranslate"><span class="pre">DatastoreWriter.write()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#eeg_access.build_trial_metadata"><code class="docutils literal notranslate"><span class="pre">build_trial_metadata()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eeg_access.find_metadata"><code class="docutils literal notranslate"><span class="pre">find_metadata()</span></code></a></li>
@@ -300,6 +307,33 @@ fresh integer index.  Pass this directly to <a class="reference internal" href="
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">lookup_trials</span><span class="p">(</span><span class="n">cond</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="s1">&#39;sub-02&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="writing-data">
+<h2>Writing Data<a class="headerlink" href="#writing-data" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eeg_access.DatastoreWriter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eeg_access.</span></span><span class="sig-name descname"><span class="pre">DatastoreWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eeg_access/writedata/datastore_writer.html#DatastoreWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.DatastoreWriter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Convert a preprocessing endpoint of MNE epoch files into a zarr datastore.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Root directory containing <code class="docutils literal notranslate"><span class="pre">*_epo.fif</span></code> files (searched recursively).
+A stimulus table is expected at <code class="docutils literal notranslate"><span class="pre">&lt;root&gt;/&lt;STIM_RELPATH&gt;</span></code>.</p></li>
+<li><p><strong>out</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Output directory where zarr chunks and metadata will be written.</p></li>
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Target size in GB for each zarr chunk (default 2.0).</p></li>
+<li><p><strong>inner_chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of epochs per zarr inner chunk along the first axis (default 500).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eeg_access.DatastoreWriter.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/eeg_access/writedata/datastore_writer.html#DatastoreWriter.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.DatastoreWriter.write" title="Link to this definition"></a></dt>
+<dd><p>Run the full write pipeline.</p>
 </dd></dl>
 
 </dd></dl>
