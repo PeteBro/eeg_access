@@ -6,18 +6,22 @@ import pandas as pd
 import zarr
 from pathlib import Path
 
-def find_root(start=None, marker="nsdBIDS"):
-    """
-    Walk upward from `start` until a directory named `marker` is found.
-    Returns abspath to the marker directory.
-    """
-    start = Path(start or Path.cwd()).resolve()
-    for parent in [start, *start.parents]:
-        if (parent / marker).is_dir():
-            return parent
-    raise RuntimeError(
-        f"Could not find dataset root '{marker}' starting from {start}"
-    )
+def resolve_dir(path, start=None):
+
+    start = Path.resolve(path) if start else os.getcwd()
+    upward = [p / path for p in [start, *start.parents] if (p / path).is_dir()]
+    downward = [p for p in Path("/").rglob(path) if p.is_dir()]
+
+    matches = list({p.resolve() for p in upward + downward})
+
+    if len(matches) == 0:
+        raise RuntimeError(f"Could not find directory '{path}'")
+    if len(matches) > 1:
+        matches_str = "\n  ".join(str(m) for m in matches)
+        raise RuntimeError(f"Ambiguous — multiple '{path}' directories found:\n  {matches_str}")
+
+    return matches[0]
+
 
 def check_islocal(paths):
 
@@ -31,63 +35,6 @@ def fetch_remote(remote_path, local_path):
     # for now, use DVC Python API
 
     pass
-
-def find_metadata(dataset_root: str, version: str) -> str:
-    """Return the path to the metadata TSV for a given data version.
-
-    Searches *dataset_root* recursively for a directory whose name matches
-    *version*, then looks inside it for a file matching ``*metadata.tsv``.
-
-    This is shared by all data loaders (epochs, raw, etc.) so that each one
-    does not need its own path-discovery logic.
-
-    Parameters
-    ----------
-    dataset_root : str
-        Top-level folder of your dataset (e.g. ``'/data/eeg_study'``).
-    version : str
-        Name of the version directory to search for (e.g. ``'v2'``).  The
-        directory can sit anywhere under *dataset_root*.
-
-    Returns
-    -------
-    str
-        Full path to the matching ``*metadata.tsv`` file.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the version directory does not exist under *dataset_root*, or if
-        no ``*metadata.tsv`` file is found inside it.
-    ValueError
-        If more than one version directory or more than one metadata file is
-        found (ambiguous match).
-    """
-    version_dirs = [
-        m for m in glob.glob(os.path.join(dataset_root, "**", version), recursive=True)
-        if os.path.isdir(m)
-    ]
-    if not version_dirs:
-        raise FileNotFoundError(
-            f"No directory named '{version}' found under '{dataset_root}'"
-        )
-    if len(version_dirs) > 1:
-        raise ValueError(
-            f"Multiple directories named '{version}' found under '{dataset_root}':\n"
-            + "\n".join(version_dirs)
-        )
-    tsvs = glob.glob(os.path.join(version_dirs[0], "*metadata.tsv"))
-    if not tsvs:
-        raise FileNotFoundError(
-            f"No '*metadata.tsv' file found in '{version_dirs[0]}'"
-        )
-    if len(tsvs) > 1:
-        raise ValueError(
-            f"Multiple metadata files found in '{version_dirs[0]}':\n"
-            + "\n".join(tsvs)
-            + "\nSpecify the file explicitly to resolve the ambiguity."
-        )
-    return tsvs[0]
 
 
 def build_trial_metadata(epochs_root: str) -> pd.DataFrame:

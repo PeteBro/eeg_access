@@ -1,10 +1,13 @@
 """Trial metadata lookup and data loader."""
 
+import os
+import glob
 import numpy as np
 import pandas as pd
 import zarr
 from tqdm import tqdm
-from ..utilities import find_metadata
+from pathlib import Path
+from ..utilities import build_trial_metadata, resolve_dir
 
 
 class TrialHandler:
@@ -46,16 +49,22 @@ class TrialHandler:
     """
 
 #
-    def __init__(self, dataset_root: str, version: str):
-        """Locate the metadata table for *version* and load it."""
+    def __init__(self, dataset_root: str = 'nsdBIDS', version: str = 'preproc_1'):
+        """Resolve paths for reading datastore and initialize store cache for fast reading."""
 #
+        self.root = resolve_dir(dataset_root)
+        self.datastore = resolve_dir(os.path.join(version, 'datastore'), start=self.root)
+        self.metadata_path = os.path.join(self.datastore, 'metadata.tsv')
+        if os.path.isfile(self.metadata_path):
+            self.metadata = pd.read_csv(self.metadata_path, sep="\t", index_col=0)
+        else:
+            self.metadata = build_trial_metadata(self.datastore)
+        self.metadata['path'] = self.metadata['path'].apply(lambda p: (Path(self.datastore) / p).resolve())
         self.store_cache = {}
-        lookup_path = find_metadata(dataset_root, version)
-        self.metadata = pd.read_csv(lookup_path, sep="\t", index_col=0)
 
 #
     def lookup_trials(self, cond='and', **filters) -> pd.DataFrame:
-        """Return a subset of the metadata table matching the given criteria.
+        """Return trials matching the given metadata criteria.
 
         Pass any metadata column as a keyword argument to filter trials.
         Multiple filters are combined with ``cond='and'`` (all criteria must
@@ -71,8 +80,8 @@ class TrialHandler:
             satisfy **at least one**.
         **filters
             Column name / value pairs.  The value can be a single item or a
-            list.  For example ``nsd_id=[1, 2, 3]`` keeps only trials whose
-            ``nsd_id`` column is 1, 2, or 3.
+            list.  For example ``condition=[1, 2, 3]`` keeps only trials whose
+            ``condition`` column is 1, 2, or 3.
 
         Returns
         -------
@@ -100,6 +109,7 @@ class TrialHandler:
             mask = np.all(mask, axis=1)
         if cond == 'or':
             mask = np.any(mask, axis=1)
+
         return self.metadata[mask].sort_values(list(filters.keys())).reset_index(drop=True)
 
 #
@@ -146,8 +156,8 @@ class TrialHandler:
             timecourse is always returned for now.
         average_by : str or list of str, optional
             Metadata column(s) to average over.  For example
-            ``average_by='subject'`` returns one averaged waveform per
-            subject instead of one waveform per trial.
+            ``average_by='condition'`` returns one averaged waveform per
+            condition instead of one waveform per trial.
         verbose : bool, optional
             Show a progress bar while loading.  Default ``True``.
         cond : {'and', 'or'}, optional
