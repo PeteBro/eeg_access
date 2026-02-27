@@ -1,0 +1,12 @@
+numpy
+pandas
+zarr
+tqdm
+
+[dev]
+pytest
+ruff
+
+[docs]
+sphinx>=7
+sphinx-rtd-theme>=2

@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; eeg_access  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            eeg_access
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#trial-data">Trial Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eeg_access.TrialHandler"><code class="docutils literal notranslate"><span class="pre">TrialHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#eeg_access.TrialHandler.get_data"><code class="docutils literal notranslate"><span class="pre">TrialHandler.get_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#eeg_access.TrialHandler.iter_data"><code class="docutils literal notranslate"><span class="pre">TrialHandler.iter_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials"><code class="docutils literal notranslate"><span class="pre">TrialHandler.lookup_trials()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eeg_access.build_trial_metadata"><code class="docutils literal notranslate"><span class="pre">build_trial_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eeg_access.find_metadata"><code class="docutils literal notranslate"><span class="pre">find_metadata()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">eeg_access</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<section id="trial-data">
+<h2>Trial Data<a class="headerlink" href="#trial-data" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eeg_access.TrialHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eeg_access.</span></span><span class="sig-name descname"><span class="pre">TrialHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eeg_access/getdata/get_trials.html#TrialHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.TrialHandler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Load and filter EEG trial data from a versioned zarr-backed dataset.</p>
+<p>Point this class at your dataset root folder and tell it which data version
+you want to work with.  It will find the matching metadata table
+automatically, giving you a simple interface to select and load trials.</p>
+<p>The dataset is expected to follow this layout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>dataset_root/
+└── .../ (any depth)
+    └── &lt;version&gt;/
+        ├── *metadata.tsv
+        └── sub-XX/
+            └── chunk-XX/   ← zarr stores
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Top-level folder of your dataset (e.g. <code class="docutils literal notranslate"><span class="pre">'/data/eeg_study'</span></code>).</p></li>
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the data version directory to load (e.g. <code class="docutils literal notranslate"><span class="pre">'v2'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">'preprocessed_v3'</span></code>).  The directory can sit anywhere under
+<em>dataset_root</em> — it will be located automatically.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loader</span> <span class="o">=</span> <span class="n">TrialHandler</span><span class="p">(</span><span class="s1">&#39;/data/eeg_study&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;v2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load a specific subset by filtering inline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Or look up a trial table first, then load</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">lookup_trials</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">trials</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>   <span class="c1"># (n_trials, n_channels, n_samples)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="eeg_access.TrialHandler.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'and'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="_modules/eeg_access/getdata/get_trials.html#TrialHandler.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.TrialHandler.get_data" title="Link to this definition"></a></dt>
+<dd><p>Load EEG data into memory, with optional inline trial filtering.</p>
+<p>Reads the EEG arrays from disk and returns them as a NumPy array
+together with the corresponding metadata.  Zarr stores are cached
+after the first open, so repeated calls for trials from the same
+store are fast.</p>
+<p>You can supply trials three ways:</p>
+<ul class="simple">
+<li><p>Pass a pre-built <code class="docutils literal notranslate"><span class="pre">trials</span></code> DataFrame (e.g. from
+<a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a>).</p></li>
+<li><p>Pass filter keyword arguments directly — <a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a> is
+called internally.</p></li>
+<li><p>Pass neither — all trials in the metadata table are loaded.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trials</strong> (<em>pd.DataFrame</em><em>, </em><em>optional</em>) – Trial metadata table.  Must contain <code class="docutils literal notranslate"><span class="pre">path</span></code> and <code class="docutils literal notranslate"><span class="pre">array_index</span></code>
+columns.  When omitted, <code class="docutils literal notranslate"><span class="pre">**filters</span></code> (if any) are used to build
+the table automatically via <a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a>.</p></li>
+<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>, </em><em>optional</em>) – Channels to load.  Can be a list of integer indices or channel
+name strings.  When omitted, all channels are returned.</p></li>
+<li><p><strong>tmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Start of the time window in seconds.  Not yet active — the full
+timecourse is always returned for now.</p></li>
+<li><p><strong>tmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – End of the time window in seconds.  Not yet active — the full
+timecourse is always returned for now.</p></li>
+<li><p><strong>average_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Metadata column(s) to average over.  For example
+<code class="docutils literal notranslate"><span class="pre">average_by='subject'</span></code> returns one averaged waveform per
+subject instead of one waveform per trial.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Show a progress bar while loading.  Default <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>cond</strong> (<em>{'and'</em><em>, </em><em>'or'}</em><em>, </em><em>optional</em>) – How to combine multiple <code class="docutils literal notranslate"><span class="pre">**filters</span></code> (passed to
+<a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a>).  Ignored when <code class="docutils literal notranslate"><span class="pre">trials</span></code> is provided
+explicitly.  Default <code class="docutils literal notranslate"><span class="pre">'and'</span></code>.</p></li>
+<li><p><strong>**filters</strong> – Column / value pairs forwarded to <a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a> when
+<code class="docutils literal notranslate"><span class="pre">trials</span></code> is not provided.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A dictionary with two keys:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">'data'</span></code></dt><dd><p>NumPy array of shape <code class="docutils literal notranslate"><span class="pre">(n_trials,</span> <span class="pre">n_channels,</span> <span class="pre">n_samples)</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">(n_groups,</span> <span class="pre">n_channels,</span> <span class="pre">n_samples)</span></code> when
+<code class="docutils literal notranslate"><span class="pre">average_by</span></code> is set), dtype <code class="docutils literal notranslate"><span class="pre">float32</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">'metadata'</span></code></dt><dd><p>DataFrame with one row per trial (or per group when
+<code class="docutils literal notranslate"><span class="pre">average_by</span></code> is set), aligned to the first axis of
+<code class="docutils literal notranslate"><span class="pre">'data'</span></code>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Inline filtering — no separate lookup_trials call needed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>    <span class="c1"># shape: (n_trials, n_channels, n_samples)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Pass a pre-built trial table</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">lookup_trials</span><span class="p">(</span><span class="n">nsd_id</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">trials</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Average across trials, grouped by subject</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">average_by</span><span class="o">=</span><span class="s1">&#39;subject&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eeg_access.TrialHandler.iter_data">
+<span class="sig-name descname"><span class="pre">iter_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_lookup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'and'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eeg_access/getdata/get_trials.html#TrialHandler.iter_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.TrialHandler.iter_data" title="Link to this definition"></a></dt>
+<dd><p>Iterate over trials in memory-friendly batches.</p>
+<p>Yields successive chunks of loaded EEG data instead of loading
+everything at once.  Useful when your full trial set is too large to
+fit in RAM, or when you want to feed a model batch-by-batch.</p>
+<p>Each yielded item has the same structure as the dict returned by
+<a class="reference internal" href="#eeg_access.TrialHandler.get_data" title="eeg_access.TrialHandler.get_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data()</span></code></a>: a <code class="docutils literal notranslate"><span class="pre">'data'</span></code> array and a <code class="docutils literal notranslate"><span class="pre">'metadata'</span></code> DataFrame.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">average_by</span></code> is set, the iterator guarantees that all trials
+belonging to the same group are included in the same batch before
+averaging — groups are never split across batches.</p>
+<p>As with <a class="reference internal" href="#eeg_access.TrialHandler.get_data" title="eeg_access.TrialHandler.get_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data()</span></code></a>, you can pass a pre-built <code class="docutils literal notranslate"><span class="pre">trials</span></code> table,
+supply <code class="docutils literal notranslate"><span class="pre">**filters</span></code> to build one inline, or omit both to iterate
+over all trials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trials</strong> (<em>pd.DataFrame</em><em>, </em><em>optional</em>) – Trial metadata table.  When omitted, <code class="docutils literal notranslate"><span class="pre">**filters</span></code> (if any) are
+used to build it via <a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a>, or all trials are
+used if no filters are given.</p></li>
+<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum number of trials (or group rows) to load per batch.
+Default is 64.</p></li>
+<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>, </em><em>optional</em>) – Channels to load (integer indices or name strings).  All channels
+are loaded when omitted.</p></li>
+<li><p><strong>tmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Start of the time window in seconds (not yet active).</p></li>
+<li><p><strong>tmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – End of the time window in seconds (not yet active).</p></li>
+<li><p><strong>average_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Metadata column(s) to average over within each batch.</p></li>
+<li><p><strong>sort_lookup</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Sort trials by store path and array index before iterating for
+more efficient sequential disk reads.  Default <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>cond</strong> (<em>{'and'</em><em>, </em><em>'or'}</em><em>, </em><em>optional</em>) – How to combine multiple <code class="docutils literal notranslate"><span class="pre">**filters</span></code>.  Ignored when <code class="docutils literal notranslate"><span class="pre">trials</span></code>
+is provided explicitly.  Default <code class="docutils literal notranslate"><span class="pre">'and'</span></code>.</p></li>
+<li><p><strong>**filters</strong> – Column / value pairs forwarded to <a class="reference internal" href="#eeg_access.TrialHandler.lookup_trials" title="eeg_access.TrialHandler.lookup_trials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lookup_trials()</span></code></a> when
+<code class="docutils literal notranslate"><span class="pre">trials</span></code> is not provided.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>dict</em> – Same structure as <a class="reference internal" href="#eeg_access.TrialHandler.get_data" title="eeg_access.TrialHandler.get_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data()</span></code></a>: <code class="docutils literal notranslate"><span class="pre">{'data':</span> <span class="pre">np.ndarray,</span>
+<span class="pre">'metadata':</span> <span class="pre">pd.DataFrame}</span></code>.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Inline filtering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">loader</span><span class="o">.</span><span class="n">iter_data</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">eeg</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>   <span class="c1"># shape: (&lt;=32, n_channels, n_samples)</span>
+<span class="gp">... </span>    <span class="n">meta</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">process</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Iterate with per-stimulus averaging</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">lookup_trials</span><span class="p">(</span><span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">loader</span><span class="o">.</span><span class="n">iter_data</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">average_by</span><span class="o">=</span><span class="s1">&#39;subject&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">process</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eeg_access.TrialHandler.lookup_trials">
+<span class="sig-name descname"><span class="pre">lookup_trials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'and'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/eeg_access/getdata/get_trials.html#TrialHandler.lookup_trials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.TrialHandler.lookup_trials" title="Link to this definition"></a></dt>
+<dd><p>Return a subset of the metadata table matching the given criteria.</p>
+<p>Pass any metadata column as a keyword argument to filter trials.
+Multiple filters are combined with <code class="docutils literal notranslate"><span class="pre">cond='and'</span></code> (all criteria must
+match) or <code class="docutils literal notranslate"><span class="pre">cond='or'</span></code> (any criterion is enough).  The returned
+DataFrame can be passed directly to <a class="reference internal" href="#eeg_access.TrialHandler.get_data" title="eeg_access.TrialHandler.get_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data()</span></code></a> or
+<a class="reference internal" href="#eeg_access.TrialHandler.iter_data" title="eeg_access.TrialHandler.iter_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">iter_data()</span></code></a>, or inspected before loading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cond</strong> (<em>{'and'</em><em>, </em><em>'or'}</em><em>, </em><em>optional</em>) – How to combine multiple filters.  <code class="docutils literal notranslate"><span class="pre">'and'</span></code> (default) keeps only
+trials that satisfy <strong>all</strong> filters; <code class="docutils literal notranslate"><span class="pre">'or'</span></code> keeps trials that
+satisfy <strong>at least one</strong>.</p></li>
+<li><p><strong>**filters</strong> – Column name / value pairs.  The value can be a single item or a
+list.  For example <code class="docutils literal notranslate"><span class="pre">nsd_id=[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> keeps only trials whose
+<code class="docutils literal notranslate"><span class="pre">nsd_id</span></code> column is 1, 2, or 3.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Filtered metadata table, sorted by the filter columns and with a
+fresh integer index.  Pass this directly to <a class="reference internal" href="#eeg_access.TrialHandler.get_data" title="eeg_access.TrialHandler.get_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># All shared trials for subject 01</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">lookup_trials</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Trials from subject 01 OR subject 02</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trials</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">lookup_trials</span><span class="p">(</span><span class="n">cond</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sub-01&#39;</span><span class="p">,</span> <span class="s1">&#39;sub-02&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="eeg_access.build_trial_metadata">
+<span class="sig-prename descclassname"><span class="pre">eeg_access.</span></span><span class="sig-name descname"><span class="pre">build_trial_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/eeg_access/utilities.html#build_trial_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.build_trial_metadata" title="Link to this definition"></a></dt>
+<dd><p>Build a trial metadata table from scratch by scanning zarr stores on disk.</p>
+<p>Use this when you have preprocessed your own raw EEG data into zarr epochs
+and need to generate the <code class="docutils literal notranslate"><span class="pre">*metadata.tsv</span></code> lookup file that
+<a class="reference internal" href="#eeg_access.TrialHandler" title="eeg_access.getdata.get_trials.TrialHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrialHandler</span></code></a> expects.</p>
+<p>The function walks <em>epochs_root</em> looking for <code class="docutils literal notranslate"><span class="pre">sub-*/chunk-*</span></code> zarr stores,
+reads the metadata embedded in each store, and assembles it into a single
+table with one row per trial.  Save the result as a TSV to use it with
+<a class="reference internal" href="#eeg_access.TrialHandler" title="eeg_access.getdata.get_trials.TrialHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrialHandler</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>epochs_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Directory containing <code class="docutils literal notranslate"><span class="pre">sub-XX/chunk-XX</span></code> zarr stores (e.g.
+<code class="docutils literal notranslate"><span class="pre">'/data/eeg_study/v2'</span></code>).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per trial.  Columns are the metadata fields stored inside each
+zarr file plus a <code class="docutils literal notranslate"><span class="pre">path</span></code> column with the full path to the zarr store
+that holds that trial’s EEG data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">meta</span> <span class="o">=</span> <span class="n">build_trial_metadata</span><span class="p">(</span><span class="s1">&#39;/data/eeg_study/v2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meta</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;/data/eeg_study/v2/epoch_metadata.tsv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="eeg_access.find_metadata">
+<span class="sig-prename descclassname"><span class="pre">eeg_access.</span></span><span class="sig-name descname"><span class="pre">find_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/eeg_access/utilities.html#find_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eeg_access.find_metadata" title="Link to this definition"></a></dt>
+<dd><p>Return the path to the metadata TSV for a given data version.</p>
+<p>Searches <em>dataset_root</em> recursively for a directory whose name matches
+<em>version</em>, then looks inside it for a file matching <code class="docutils literal notranslate"><span class="pre">*metadata.tsv</span></code>.</p>
+<p>This is shared by all data loaders (epochs, raw, etc.) so that each one
+does not need its own path-discovery logic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Top-level folder of your dataset (e.g. <code class="docutils literal notranslate"><span class="pre">'/data/eeg_study'</span></code>).</p></li>
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the version directory to search for (e.g. <code class="docutils literal notranslate"><span class="pre">'v2'</span></code>).  The
+directory can sit anywhere under <em>dataset_root</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Full path to the matching <code class="docutils literal notranslate"><span class="pre">*metadata.tsv</span></code> file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.14)"><strong>FileNotFoundError</strong></a> – If the version directory does not exist under <em>dataset_root</em>, or if
+    no <code class="docutils literal notranslate"><span class="pre">*metadata.tsv</span></code> file is found inside it.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If more than one version directory or more than one metadata file is
+    found (ambiguous match).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, eeg_access contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

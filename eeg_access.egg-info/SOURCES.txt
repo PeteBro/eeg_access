@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+eeg_access/__init__.py
+eeg_access/utilities.py
+eeg_access.egg-info/PKG-INFO
+eeg_access.egg-info/SOURCES.txt
+eeg_access.egg-info/dependency_links.txt
+eeg_access.egg-info/requires.txt
+eeg_access.egg-info/top_level.txt
+eeg_access/getdata/__init__.py
+eeg_access/getdata/get_raw.py
+eeg_access/getdata/get_trials.py

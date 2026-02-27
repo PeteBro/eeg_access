@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import zarr
 from tqdm import tqdm
-from .utilities import find_metadata
+from ..utilities import find_metadata
 
 
 class TrialHandler:
