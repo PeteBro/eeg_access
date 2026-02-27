@@ -14,8 +14,8 @@ Or install from source::
    cd eeg_access
    pip install .
 
-Quick Start
------------
+Loading Data
+------------
 
 Load trials from a versioned zarr dataset::
 
@@ -36,14 +36,3 @@ Load trials from a versioned zarr dataset::
    for batch in loader.iter_data(subject='sub-01', batch_size=64):
        process(batch['data'])
 
-Expected Dataset Layout
------------------------
-
-.. code-block:: text
-
-   dataset_root/
-   └── .../ (any depth)
-       └── <version>/
-           ├── *metadata.tsv
-           └── sub-XX/
-               └── chunk-XX/   ← zarr stores
