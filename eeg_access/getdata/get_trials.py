@@ -7,7 +7,7 @@ from tqdm import tqdm
 from .utilities import find_metadata
 
 
-class EpochLookup:
+class TrialHandler:
     """Load and filter EEG trial data from a versioned zarr-backed dataset.
 
     Point this class at your dataset root folder and tell it which data version
@@ -34,9 +34,14 @@ class EpochLookup:
 
     Examples
     --------
-    >>> el = EpochLookup('/data/eeg_study', version='v2')
-    >>> trials = el.lookup_trials(condition='faces', subject='sub-01')
-    >>> result = el.get_data(trials)
+    >>> loader = TrialHandler('/data/eeg_study', version='v2')
+
+    >>> # Load a specific subset by filtering inline
+    >>> result = loader.get_data(subject='sub-01', shared=True)
+
+    >>> # Or look up a trial table first, then load
+    >>> trials = loader.lookup_trials(subject='sub-01', shared=True)
+    >>> result = loader.get_data(trials)
     >>> result['data'].shape   # (n_trials, n_channels, n_samples)
     """
 
@@ -55,7 +60,8 @@ class EpochLookup:
         Pass any metadata column as a keyword argument to filter trials.
         Multiple filters are combined with ``cond='and'`` (all criteria must
         match) or ``cond='or'`` (any criterion is enough).  The returned
-        DataFrame is what you pass to :meth:`get_data` or :meth:`iter_data`.
+        DataFrame can be passed directly to :meth:`get_data` or
+        :meth:`iter_data`, or inspected before loading.
 
         Parameters
         ----------
@@ -65,8 +71,8 @@ class EpochLookup:
             satisfy **at least one**.
         **filters
             Column name / value pairs.  The value can be a single item or a
-            list.  For example ``condition=['faces', 'objects']`` keeps trials
-            whose ``condition`` column is either ``'faces'`` or ``'objects'``.
+            list.  For example ``nsd_id=[1, 2, 3]`` keeps only trials whose
+            ``nsd_id`` column is 1, 2, or 3.
 
         Returns
         -------
@@ -76,12 +82,11 @@ class EpochLookup:
 
         Examples
         --------
-        >>> # All face trials for subject 01
-        >>> trials = el.lookup_trials(condition='faces', subject='sub-01')
+        >>> # All shared trials for subject 01
+        >>> trials = loader.lookup_trials(subject='sub-01', shared=True)
 
-        >>> # Face or object trials (any subject)
-        >>> trials = el.lookup_trials(cond='or', condition='faces',
-        ...                           category='objects')
+        >>> # Trials from subject 01 OR subject 02
+        >>> trials = loader.lookup_trials(cond='or', subject=['sub-01', 'sub-02'])
         """
         mask = pd.DataFrame(
             np.full(self.metadata.shape, True), columns=self.metadata.columns
@@ -100,26 +105,36 @@ class EpochLookup:
 #
     def get_data(
         self,
-        trials: pd.DataFrame,
+        trials: pd.DataFrame = None,
         channels=None,
         tmin: float = None,
         tmax: float = None,
         average_by=None,
         verbose=True,
+        cond='and',
+        **filters,
     ) -> dict:
-        """Load EEG data for the given trials into memory.
+        """Load EEG data into memory, with optional inline trial filtering.
 
-        Reads the EEG arrays from disk for every trial in ``trials`` and
-        returns them as a NumPy array together with the corresponding metadata.
-        Zarr stores are cached after the first open, so repeated calls for
-        trials from the same store are fast.
+        Reads the EEG arrays from disk and returns them as a NumPy array
+        together with the corresponding metadata.  Zarr stores are cached
+        after the first open, so repeated calls for trials from the same
+        store are fast.
+
+        You can supply trials three ways:
+
+        * Pass a pre-built ``trials`` DataFrame (e.g. from
+          :meth:`lookup_trials`).
+        * Pass filter keyword arguments directly — :meth:`lookup_trials` is
+          called internally.
+        * Pass neither — all trials in the metadata table are loaded.
 
         Parameters
         ----------
-        trials : pd.DataFrame
-            Trial metadata table — typically the output of
-            :meth:`lookup_trials`.  Must contain ``path`` and ``array_index``
-            columns.
+        trials : pd.DataFrame, optional
+            Trial metadata table.  Must contain ``path`` and ``array_index``
+            columns.  When omitted, ``**filters`` (if any) are used to build
+            the table automatically via :meth:`lookup_trials`.
         channels : list, optional
             Channels to load.  Can be a list of integer indices or channel
             name strings.  When omitted, all channels are returned.
@@ -131,10 +146,17 @@ class EpochLookup:
             timecourse is always returned for now.
         average_by : str or list of str, optional
             Metadata column(s) to average over.  For example
-            ``average_by='condition'`` returns one averaged waveform per
-            condition instead of one waveform per trial.
+            ``average_by='subject'`` returns one averaged waveform per
+            subject instead of one waveform per trial.
         verbose : bool, optional
             Show a progress bar while loading.  Default ``True``.
+        cond : {'and', 'or'}, optional
+            How to combine multiple ``**filters`` (passed to
+            :meth:`lookup_trials`).  Ignored when ``trials`` is provided
+            explicitly.  Default ``'and'``.
+        **filters
+            Column / value pairs forwarded to :meth:`lookup_trials` when
+            ``trials`` is not provided.
 
         Returns
         -------
@@ -152,14 +174,20 @@ class EpochLookup:
 
         Examples
         --------
-        >>> trials = el.lookup_trials(condition='faces')
-        >>> result = el.get_data(trials)
+        >>> # Inline filtering — no separate lookup_trials call needed
+        >>> result = loader.get_data(subject='sub-01', shared=True)
         >>> eeg = result['data']    # shape: (n_trials, n_channels, n_samples)
-        >>> meta = result['metadata']
 
-        >>> # Average across trials, grouped by condition
-        >>> result = el.get_data(trials, average_by='condition')
+        >>> # Pass a pre-built trial table
+        >>> trials = loader.lookup_trials(nsd_id=[1, 2, 3])
+        >>> result = loader.get_data(trials)
+
+        >>> # Average across trials, grouped by subject
+        >>> result = loader.get_data(shared=True, average_by='subject')
         """
+        if trials is None:
+            trials = self.lookup_trials(cond=cond, **filters) if filters else self.metadata.copy()
+
         stores = trials['path'].unique()
         for path in stores:
             if path not in self.store_cache.keys():
@@ -219,13 +247,15 @@ class EpochLookup:
 #
     def iter_data(
         self,
-        trials: pd.DataFrame,
+        trials: pd.DataFrame = None,
         batch_size: int = 64,
         channels=None,
         tmin: float = None,
         tmax: float = None,
         average_by=None,
         sort_lookup=True,
+        cond='and',
+        **filters,
     ):
         """Iterate over trials in memory-friendly batches.
 
@@ -240,11 +270,16 @@ class EpochLookup:
         belonging to the same group are included in the same batch before
         averaging — groups are never split across batches.
 
+        As with :meth:`get_data`, you can pass a pre-built ``trials`` table,
+        supply ``**filters`` to build one inline, or omit both to iterate
+        over all trials.
+
         Parameters
         ----------
-        trials : pd.DataFrame
-            Trial metadata table — typically the output of
-            :meth:`lookup_trials`.
+        trials : pd.DataFrame, optional
+            Trial metadata table.  When omitted, ``**filters`` (if any) are
+            used to build it via :meth:`lookup_trials`, or all trials are
+            used if no filters are given.
         batch_size : int, optional
             Maximum number of trials (or group rows) to load per batch.
             Default is 64.
@@ -256,11 +291,16 @@ class EpochLookup:
         tmax : float, optional
             End of the time window in seconds (not yet active).
         average_by : str or list of str, optional
-            Metadata column(s) to average over within each batch, e.g.
-            ``average_by='condition'``.
+            Metadata column(s) to average over within each batch.
         sort_lookup : bool, optional
-            Sort ``trials`` by store path and array index before iterating for
+            Sort trials by store path and array index before iterating for
             more efficient sequential disk reads.  Default ``True``.
+        cond : {'and', 'or'}, optional
+            How to combine multiple ``**filters``.  Ignored when ``trials``
+            is provided explicitly.  Default ``'and'``.
+        **filters
+            Column / value pairs forwarded to :meth:`lookup_trials` when
+            ``trials`` is not provided.
 
         Yields
         ------
@@ -270,12 +310,20 @@ class EpochLookup:
 
         Examples
         --------
-        >>> trials = el.lookup_trials(condition='faces')
-        >>> for batch in el.iter_data(trials, batch_size=32):
+        >>> # Inline filtering
+        >>> for batch in loader.iter_data(subject='sub-01', batch_size=32):
         ...     eeg = batch['data']   # shape: (<=32, n_channels, n_samples)
         ...     meta = batch['metadata']
         ...     process(eeg, meta)
+
+        >>> # Iterate with per-stimulus averaging
+        >>> trials = loader.lookup_trials(shared=True)
+        >>> for batch in loader.iter_data(trials, batch_size=64, average_by='subject'):
+        ...     process(batch['data'], batch['metadata'])
         """
+        if trials is None:
+            trials = self.lookup_trials(cond=cond, **filters) if filters else self.metadata.copy()
+
         keys = ([average_by] if isinstance(average_by, str) else list(average_by)) if average_by else None
 #
         if sort_lookup:

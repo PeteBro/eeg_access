@@ -69,12 +69,12 @@ def build_trial_metadata(epochs_root: str) -> pd.DataFrame:
 
     Use this when you have preprocessed your own raw EEG data into zarr epochs
     and need to generate the ``*metadata.tsv`` lookup file that
-    :class:`~eeg_access.getdata.get_trials.EpochLookup` expects.
+    :class:`~eeg_access.getdata.get_trials.TrialHandler` expects.
 
     The function walks *epochs_root* looking for ``sub-*/chunk-*`` zarr stores,
     reads the metadata embedded in each store, and assembles it into a single
     table with one row per trial.  Save the result as a TSV to use it with
-    :class:`~eeg_access.getdata.get_trials.EpochLookup`.
+    :class:`~eeg_access.getdata.get_trials.TrialHandler`.
 
     Parameters
     ----------
