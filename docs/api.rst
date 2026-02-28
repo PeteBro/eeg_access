@@ -19,5 +19,3 @@ Utilities
 ---------
 
 .. autofunction:: build_trial_metadata
-
-.. autofunction:: find_metadata
