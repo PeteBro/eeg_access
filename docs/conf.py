@@ -27,7 +27,7 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 
-autodoc_mock_imports = ["mne", "numcodecs"]
+autodoc_mock_imports = ["mne", "numcodecs", "zarr", "tqdm", "dvc"]
 
 napoleon_numpy_docstring = True
 napoleon_google_docstring = False
