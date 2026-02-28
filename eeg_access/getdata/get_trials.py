@@ -7,7 +7,7 @@ import pandas as pd
 import zarr
 from tqdm import tqdm
 from pathlib import Path
-from ..utilities import build_trial_metadata, resolve_dir
+from ..utilities import build_trial_metadata, resolve_dir, check_islocal, fetch_remote
 
 
 class TrialHandler:
@@ -57,11 +57,6 @@ class TrialHandler:
         self.datastore = resolve_dir(os.path.join(version, 'datastore'), start=self.root)
         print('Reading metadata...')
         self.metadata_path = os.path.join(self.datastore, 'metadata.tsv')
-        if os.path.isfile(self.metadata_path):
-            self.metadata = pd.read_csv(self.metadata_path, sep="\t", index_col=0)
-        else:
-            print('Metadata not found, building from datastore...')
-            self.metadata = build_trial_metadata(self.datastore)
         self.metadata['path'] = self.metadata['path'].apply(lambda p: (Path(self.datastore) / p).resolve())
         self.store_cache = {}
         print('Done.')
@@ -114,7 +109,17 @@ class TrialHandler:
         if cond == 'or':
             mask = np.any(mask, axis=1)
 
-        return self.metadata[mask].sort_values(list(filters.keys())).reset_index(drop=True)
+        trials = self.metadata[mask].sort_values(list(filters.keys())).reset_index(drop=True)
+        missing = [p for p, local in check_islocal(trials['path'].unique()).items() if not local]
+        
+        if missing:
+            ans = input(f'{len(missing)} data store(s) not found locally. Download from remote? [y/n] ')
+            if ans.strip().lower() == 'y':
+                fetch_remote(missing)
+            else:
+                trials = trials[~trials['path'].isin(missing)].reset_index(drop=True)
+        
+        return trials
 
 #
     def get_data(

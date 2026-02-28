@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import zarr
 from pathlib import Path
+from dvc.repo import Repo
 
 def resolve_dir(path, start=None):
 
@@ -26,16 +27,19 @@ def resolve_dir(path, start=None):
 
 def check_islocal(paths):
 
-    islocal = list(map(lambda p: os.path.isfile(p), paths))
-    
-    return dict(zip(paths, islocal))
+    return {p: os.path.exists(p) for p in paths}
 
 
-def fetch_remote(remote_path, local_path):
+def fetch_remote(paths):
 
-    # for now, use DVC Python API
-
-    pass
+    missing = [p for p, local in check_islocal(paths).items() if not local]
+    if not missing:
+        return
+    with Repo() as repo:
+        try:
+            repo.pull(targets=[str(Path(p).resolve()) for p in missing])
+        except:
+            print('DVC fetch failed, are your credentials up to date?')
 
 
 def build_trial_metadata(epochs_root: str) -> pd.DataFrame:
