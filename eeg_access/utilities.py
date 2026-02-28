@@ -30,6 +30,25 @@ def check_islocal(paths):
     return {p: os.path.exists(p) for p in paths}
 
 
+def check_stale(paths):
+    """Return paths that exist locally but are out of date per DVC."""
+    if not paths:
+        return []
+    try:
+        with Repo() as repo:
+            status = repo.status(targets=[str(Path(p).resolve()) for p in paths])
+        if not status:
+            return []
+        stale_out_paths = set()
+        for changes in status.values():
+            for change in changes:
+                for out_path in change.get('changed outs', {}):
+                    stale_out_paths.add(str(Path(out_path).resolve()))
+        return [p for p in paths if str(Path(p).resolve()) in stale_out_paths]
+    except Exception:
+        return []
+
+
 def fetch_remote(paths):
 
     missing = [p for p, local in check_islocal(paths).items() if not local]
@@ -37,9 +56,9 @@ def fetch_remote(paths):
         return
     with Repo() as repo:
         try:
-            repo.pull(targets=[str(Path(p).resolve()) for p in missing])
+            repo.pull(targets=[f'{str(Path(p).resolve())}.dvc' for p in missing])
         except:
-            print('DVC fetch failed, are your credentials up to date?')
+            print('DVC fetch failed, check requested filenames or credentials.')
 
 
 def build_trial_metadata(epochs_root: str) -> pd.DataFrame:
