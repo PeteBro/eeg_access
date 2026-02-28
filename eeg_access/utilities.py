@@ -8,9 +8,10 @@ from pathlib import Path
 
 def resolve_dir(path, start=None):
 
-    start = Path.resolve(path) if start else os.getcwd()
+    start = Path(start).resolve() if start else Path(os.getcwd())
+    path = Path(path)
     upward = [p / path for p in [start, *start.parents] if (p / path).is_dir()]
-    downward = [p for p in Path("/").rglob(path) if p.is_dir()]
+    downward = [p for p in start.rglob(str(path)) if p.is_dir()] if not upward else []
 
     matches = list({p.resolve() for p in upward + downward})
 

@@ -52,15 +52,19 @@ class TrialHandler:
     def __init__(self, dataset_root: str = 'nsdBIDS', version: str = 'preproc_1'):
         """Resolve paths for reading datastore and initialize store cache for fast reading."""
 #
+        print('Resolving path...')
         self.root = resolve_dir(dataset_root)
         self.datastore = resolve_dir(os.path.join(version, 'datastore'), start=self.root)
+        print('Reading metadata...')
         self.metadata_path = os.path.join(self.datastore, 'metadata.tsv')
         if os.path.isfile(self.metadata_path):
             self.metadata = pd.read_csv(self.metadata_path, sep="\t", index_col=0)
         else:
+            print('Metadata not found, building from datastore...')
             self.metadata = build_trial_metadata(self.datastore)
         self.metadata['path'] = self.metadata['path'].apply(lambda p: (Path(self.datastore) / p).resolve())
         self.store_cache = {}
+        print('Done.')
 
 #
     def lookup_trials(self, cond='and', **filters) -> pd.DataFrame:
@@ -337,8 +341,7 @@ class TrialHandler:
         keys = ([average_by] if isinstance(average_by, str) else list(average_by)) if average_by else None
 #
         if sort_lookup:
-            sort_cols = (keys + ['path', 'array_index']) if keys else ['path', 'array_index']
-            trials = trials.sort_values(sort_cols)
+            trials = trials.sort_values(['path', 'array_index'])
 #
         if keys:
             # accumulate complete groups into batches, never splitting a group
