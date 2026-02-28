@@ -62,35 +62,7 @@ def fetch_remote(paths):
 
 
 def build_trial_metadata(epochs_root: str) -> pd.DataFrame:
-    """Build a trial metadata table from scratch by scanning zarr stores on disk.
 
-    Use this when you have preprocessed your own raw EEG data into zarr epochs
-    and need to generate the ``*metadata.tsv`` lookup file that
-    :class:`~eeg_access.getdata.get_trials.TrialHandler` expects.
-
-    The function walks *epochs_root* looking for ``sub-*/chunk-*`` zarr stores,
-    reads the metadata embedded in each store, and assembles it into a single
-    table with one row per trial.  Save the result as a TSV to use it with
-    :class:`~eeg_access.getdata.get_trials.TrialHandler`.
-
-    Parameters
-    ----------
-    epochs_root : str
-        Directory containing ``sub-XX/chunk-XX`` zarr stores (e.g.
-        ``'/data/eeg_study/v2'``).
-
-    Returns
-    -------
-    pd.DataFrame
-        One row per trial.  Columns are the metadata fields stored inside each
-        zarr file plus a ``path`` column with the full path to the zarr store
-        that holds that trial's EEG data.
-
-    Examples
-    --------
-    >>> meta = build_trial_metadata('/data/eeg_study/v2')
-    >>> meta.to_csv('/data/eeg_study/v2/epoch_metadata.tsv', sep='\\t')
-    """
     records = []
     for subject_dir in sorted(glob.glob(os.path.join(epochs_root, "sub-*"))):
         for chunk_dir in sorted(glob.glob(os.path.join(subject_dir, "chunk-*"))):

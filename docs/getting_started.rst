@@ -48,6 +48,67 @@ Average by condition (ERP-style)
    # result['metadata'] has one row per condition
    result = loader.get_data(trials, average_by='condition')
 
+Filter options
+~~~~~~~~~~~~~~
+
+Pass any of the following as keyword arguments to ``lookup_trials()`` to
+select a subset of trials.  Each accepts a single value or a list.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 65
+
+   * - Filter
+     - Type
+     - Description
+   * - ``subject``
+     - int
+     - Subject number. Valid values: 1–18.
+   * - ``condition``
+     - int
+     - NSD stimulus ID. Valid values: 1–73000.
+   * - ``session``
+     - int
+     - Session number.
+   * - ``run``
+     - int
+     - Run number within a session.
+   * - ``epoch``
+     - int
+     - Epoch number within a run.
+   * - ``trial_instance``
+     - int
+     - Repetition index for a trial_type + condition combination (e.g. ``1`` for
+       first-presentation).
+   * - ``trial_type``
+     - str
+     - Trial type label. Valid values: 'stimulus', 'recall', 'one-back'.
+   * - ``shared``
+     - bool
+     - ``True`` to keep only the 1000 stimuli shared across all subjects;
+       ``False`` for subject-unique stimuli.
+   * - ``datetime``
+     - str
+     - UNIX time of trial onset in seconds.
+   * - ``onset``
+     - float
+     - Trial onset time in seconds.
+   * - ``duration``
+     - float
+     - Trial duration in seconds.
+   * - ``response_time``
+     - float
+     - Participant response time in seconds.
+   * - ``response``
+     - str
+     - Participant response value.
+   * - ``trigger_value``
+     - int
+     - Trigger value sent at trial onset.
+   * - ``event_id``
+     - str
+     - Unique SHA256 trial id.
+
 Batch iteration (memory-efficient)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

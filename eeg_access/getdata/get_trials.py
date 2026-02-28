@@ -11,7 +11,7 @@ from ..utilities import build_trial_metadata, resolve_dir, check_islocal, check_
 
 
 class TrialHandler:
-    """Load and filter EEG trial data from a versioned zarr-backed dataset.
+    """Load and selected EEG trial data from a zarr datastores.
 
     Point this class at your dataset root folder and tell it which data version
     you want to work with.  It will find the matching metadata table
@@ -29,21 +29,21 @@ class TrialHandler:
     Parameters
     ----------
     dataset_root : str
-        Top-level folder of your dataset (e.g. ``'/data/eeg_study'``).
+        Top-level folder of your dataset (e.g. ``'/data/nsdBIDS'``).
     version : str
-        Name of the data version directory to load (e.g. ``'v2'`` or
-        ``'preprocessed_v3'``).  The directory can sit anywhere under
-        *dataset_root* — it will be located automatically.
+        Name of the data version directory to load (e.g. ``'preproc_1'``).
+        The directory can sit anywhere under *dataset_root* — it will be 
+        located automatically.
 
     Examples
     --------
-    >>> loader = TrialHandler('/data/eeg_study', version='v2')
+    >>> loader = TrialHandler('/data/nsdBIDS', version='preproc_1')
 
     >>> # Load a specific subset by filtering inline
-    >>> result = loader.get_data(subject='sub-01', shared=True)
+    >>> result = loader.get_data(subject=1, condition=[5, 2951])
 
     >>> # Or look up a trial table first, then load
-    >>> trials = loader.lookup_trials(subject='sub-01', shared=True)
+    >>> trials = loader.lookup_trials(subject=1)
     >>> result = loader.get_data(trials)
     >>> result['data'].shape   # (n_trials, n_channels, n_samples)
     """
@@ -83,6 +83,43 @@ class TrialHandler:
             list.  For example ``condition=[1, 2, 3]`` keeps only trials whose
             ``condition`` column is 1, 2, or 3.
 
+        Other Parameters
+        ----------------
+        subject : int or list of int
+            Subject number(s) to include.  Valid values are integers 1–18.
+        condition : int or list of int
+            NSD stimulus ID(s) to include.
+        session : int or list of int
+            Session number(s) to include.
+        run : int or list of int
+            Run number(s) within a session to include.
+        epoch : int or list of int
+            Epoch number(s) within a run to include.
+        trial_instance : int or list of int
+            Repetition index for a stimulus within a session.  Useful for
+            selecting first-presentation trials only (``trial_instance=1``).
+        trial_type : str or list of str
+            Trial type label(s) to include.
+        shared : bool
+            If ``True``, keep only the 1000 stimuli shared across all subjects.
+            If ``False``, keep only subject-unique stimuli.
+        onset : float or list of float
+            Trial onset time(s) in seconds.
+        duration : float or list of float
+            Trial duration(s) in seconds.
+        response_time : float or list of float
+            Participant response time(s) in seconds.
+        response : str or list of str
+            Participant response value(s).
+        stim_file : str or list of str
+            Stimulus filename(s).
+        trigger_value : int or list of int
+            Trigger value(s) sent at trial onset.
+        event_id : int or list of int
+            MNE event ID(s).
+        datetime : str or list of str
+            Datetime string(s) of trial onset.
+
         Returns
         -------
         pd.DataFrame
@@ -91,11 +128,11 @@ class TrialHandler:
 
         Examples
         --------
-        >>> # All shared trials for subject 01
-        >>> trials = loader.lookup_trials(subject='sub-01', shared=True)
+        >>> # All shared trials for subject 1
+        >>> trials = loader.lookup_trials(subject=1, shared=True)
 
-        >>> # Trials from subject 01 OR subject 02
-        >>> trials = loader.lookup_trials(cond='or', subject=['sub-01', 'sub-02'])
+        >>> # Trials from subject 1 OR subject 2
+        >>> trials = loader.lookup_trials(cond='or', subject=[1, 2])
         """
         mask = pd.DataFrame(
             np.full(self.metadata.shape, True), columns=self.metadata.columns
@@ -203,15 +240,15 @@ class TrialHandler:
         Examples
         --------
         >>> # Inline filtering — no separate lookup_trials call needed
-        >>> result = loader.get_data(subject='sub-01', shared=True)
+        >>> result = loader.get_data(subject=1, shared=True)
         >>> eeg = result['data']    # shape: (n_trials, n_channels, n_samples)
 
         >>> # Pass a pre-built trial table
-        >>> trials = loader.lookup_trials(nsd_id=[1, 2, 3])
+        >>> trials = loader.lookup_trials(conditions=[1, 2, 3])
         >>> result = loader.get_data(trials)
 
-        >>> # Average across trials, grouped by subject
-        >>> result = loader.get_data(shared=True, average_by='subject')
+        >>> # Average across trials, grouped by condition
+        >>> result = loader.get_data(shared=True, average_by='condition')
         """
         if trials is None:
             trials = self.lookup_trials(cond=cond, **filters) if filters else self.metadata.copy()
@@ -339,7 +376,7 @@ class TrialHandler:
         Examples
         --------
         >>> # Inline filtering
-        >>> for batch in loader.iter_data(subject='sub-01', batch_size=32):
+        >>> for batch in loader.iter_data(subject=1, batch_size=32):
         ...     eeg = batch['data']   # shape: (<=32, n_channels, n_samples)
         ...     meta = batch['metadata']
         ...     process(eeg, meta)
